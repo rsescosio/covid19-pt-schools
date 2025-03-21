@@ -1,15 +1,23 @@
 # COVID19-PT-Retrospective
 
 ## Overview 
-GitHub repository for the paper "MRetrospective evaluation of school-related measures on pre-vaccination dynamics of SARS-CoV-2". All details are described in the manuscript:
+This is a GitHub repository for the paper "Retrospective evaluation of school-related measures on pre-vaccination dynamics of SARS-CoV-2".
+In this project, we retrospectively assessed the role of school-related interventions in SARS-CoV-2 transmission in Portugal during the pre-vaccination period, providing quantitative evidence on their impact on hospital admissions and time-varying reproduction number.
+We compared the real-world baseline case to two simulated scenarios: letting the schools open throughout the first lockdown of 2020 (Scenario 1), and forcing school closures right after the summer holidays of 2020 (Scenario 2).
+
+All details are described in the manuscript:
 > Canfora, B., Escosio, R. A., Boldea, O., van Dorp, C. H., Nunes, A., and Rozhnova, G.. (2025). Retrospective evaluation of school-related measures on pre-vaccination dynamics of SARS-CoV-2. 
 
 ## Data
-The folder [DATA/EPIDEMIOLOGICAL]("DATA/EPIDEMIOLOGICAL") contains epidemiological data and PrEP data.
-The folder [DATA/SURVEY_BEHAVIOR]("DATA/SURVEY_BEHAVIOR") contains aggregated survey data on sexual contact rates. There are 3 files with 529 rows containing the individual values of the variable $c$ (contact rate adjusted by condom use and steady partners, as described in Section 2.1 of the Supplementary Material).
-- `total_curr.xlsx` refers to the scenario with no cure
-- `total_sc1.xlsx` refers to the scenario with remission cure
-- `total_sc2.xlsx` refers to the scenario with eradication cure
+The folder [data]("data") contains contact matrices, demographic data, hospitalization data, and obtained results from contact matrix construction and parameter estimation.
+In particular, the seroprevalence data is from:
+> Kislaya I, Gonçalves P, Barreto M, Sousa R, Garcia AC, Matos R, Guiomar R, Rodrigues AP; ISNCOVID-19 Group. Seroprevalence of SARS-CoV-2 Infection in Portugal in May-July 2020: Results of the First National Serological Survey (ISNCOVID-19). Acta Med Port. 2021 Feb 1;34(2):87-94. doi: 10.20344/amp.15122. Epub 2021 Feb 1. PMID: 33641702.
+The baseline contact matrix for Portugal is from:
+> Mistry, D., Litvinova, M., Pastore y Piontti, A. et al. Inferring high-resolution human mixing patterns for disease modeling. Nat Commun 12, 323 (2021). https://doi.org/10.1038/s41467-020-20544-y.
+The contact matrices for the Netherlands are from:
+> Backer JA, Mollema L, Vos ER, Klinkenberg D, van der Klis FR, deMelker HE, et al. Impact of physical distancing measures against COVID-19 on contacts and mixing patterns: repeated cross-sectional surveys, the Netherlands, 201617, April 2020 and June 2020. Eurosurveillance. 2021;26(8). doi:https://doi.org/10.2807/1560-7917.ES.2021.26.8.2000994.
+The demography [data](https://www.pordata.pt/Portugal/Popula%C3%A7%C3%A3o+residente++m%C3%A9dia+anual+total+e+por+grupo+et%C3%A1rio-10) is from the Contemporary Portugal Database (PORDATA): https://www.pordata.pt/.
+The hospitalization data is from the Central Administration of the Health System and the Shared Services of the Ministry of Health.
 
 ## Running the code
 ### Fitting 
