@@ -29,6 +29,7 @@ Parameter estimation was done with R Version 3.6.0 using R Studio Version 1.3.95
 The scripts can be found in the [script]("scripts") directory. The R and Stan scripts are based on scripts used for the following publications
 
 > van Boven M, Teirlinck AC, Meijer A, Hooiveld M, van Dorp CH, Reeves RM, Campbell H, van der Hoek W; RESCEU Investigators. Estimating Transmission Parameters for Respiratory Syncytial Virus and Predicting the Impact of Maternal and Pediatric Vaccination. *J Infect Dis.* 2020 Oct 7;222(Supplement_7):S688-S694. doi: https://doi.org/10.1093/infdis/jiaa424
+and
 > Viana J, van Dorp CH, Nunes A, Gomes MC, van Boven M, Kretzschmar ME, Veldhoen M, Rozhnova G. Controlling the pandemic during the SARS-CoV-2 vaccination rollout. Nature communications. 2021 Jun 16;12(1):3674. doi: https://doi.org/10.1038/s41467-021-23938-8.
 
 
