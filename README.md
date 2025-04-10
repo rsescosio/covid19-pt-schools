@@ -6,7 +6,7 @@ In this project, we retrospectively assessed the role of school-related interven
 We compared the real-world baseline case to two simulated scenarios: letting the schools open throughout the first lockdown of 2020 (Scenario 1), and forcing school closures right after the summer holidays of 2020 (Scenario 2).
 
 All details are described in the manuscript:
-> Canfora, B., Escosio, R. A., Boldea, O., van Dorp, C. H., Nunes, A., and Rozhnova, G.. (2025). Retrospective evaluation of school-related measures on pre-vaccination transmission dynamics of SARS-CoV-2. 
+> Canfora, B., Escosio, R. A., van Dorp, C. H., Boldea, O., Nunes, A., and Rozhnova, G.. (2025). Retrospective evaluation of school-related measures on pre-vaccination transmission dynamics of SARS-CoV-2. 
 
 
 ## Data
