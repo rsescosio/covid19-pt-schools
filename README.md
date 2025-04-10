@@ -10,7 +10,7 @@ All details are described in the manuscript:
 
 
 ## Data
-The folder [data]("data") contains contact matrices, demographic data, hospitalization data, and obtained results from contact matrix construction and parameter estimation.
+The folder [data](data) contains contact matrices, demographic data, hospitalization data, and obtained results from contact matrix construction and parameter estimation.
 In particular, the seroprevalence data is from:
 > Kislaya I, Gonçalves P, Barreto M, Sousa R, Garcia AC, Matos R, Guiomar R, Rodrigues AP; ISNCOVID-19 Group. Seroprevalence of SARS-CoV-2 Infection in Portugal in May-July 2020: Results of the First National Serological Survey (ISNCOVID-19). Acta Med Port. 2021 Feb 1;34(2):87-94. doi: 10.20344/amp.15122. Epub 2021 Feb 1. PMID: 33641702.
 
@@ -26,7 +26,7 @@ The demography [data](https://www.pordata.pt/Portugal/Popula%C3%A7%C3%A3o+reside
 ## Model
 ### Parameter estimation
 Parameter estimation was done with R Version 3.6.0 using R Studio Version 1.3.959 (Interface to R) and Stan using rstan R package Version 2.19.3 (R interface to Stan) and cmdstanr R package Version 0.1.3 on Windows 10 Home Version 1903.
-The scripts can be found in the [script]("scripts") directory. The R and Stan scripts are based on scripts used for the following publications
+The scripts can be found in the [script](scripts) directory. The R and Stan scripts are based on scripts used for the following publications
 
 > van Boven M, Teirlinck AC, Meijer A, Hooiveld M, van Dorp CH, Reeves RM, Campbell H, van der Hoek W; RESCEU Investigators. Estimating Transmission Parameters for Respiratory Syncytial Virus and Predicting the Impact of Maternal and Pediatric Vaccination. *J Infect Dis.* 2020 Oct 7;222(Supplement_7):S688-S694. doi: https://doi.org/10.1093/infdis/jiaa424
 
@@ -34,23 +34,23 @@ The scripts can be found in the [script]("scripts") directory. The R and Stan sc
 
 ### Model solutions and analysis
 The model solutions and analysis were done with Wolfram Mathematica 14.2.0.0 on Mac OS Sequioa 15.3.2.
-The [main notebook]("notebooks/main.nb") contains all the codes besides preliminary and plotting functions in the [packages]("packages") directory.
-It also contains the generated figures in the [figures]("figures") directory.
-For the local dependencies, the [preliminaries]("packages/preliminaries.m") file contain functions on file import and export, and statistical measures.
-The [plotting]("packages/plotting.m") file contain variables on colors and strings used for labeling and functions on plotting.
+The [main notebook](notebooks/main.nb) contains all the codes besides preliminary and plotting functions in the [packages](packages) directory.
+It also contains the generated figures in the [figures](figures) directory.
+For the local dependencies, the [preliminaries](packages/preliminaries.m) file contain functions on file import and export, and statistical measures.
+The [plotting](packages/plotting.m) file contain variables on colors and strings used for labeling and functions on plotting.
 
 ## Using the notebook
-You should proceed as follows: 1) use the *R* and its packages to fit the model to the data; 2) export the parameter estimates to the [data]("data") directory and use the [main notebook]("notebooks/main.nb") to perform the analyses, run scenarios, and create the figures.
+You should proceed as follows: 1) use the *R* and its packages to fit the model to the data; 2) export the parameter estimates to the [data](data) directory and use the [main notebook](notebooks/main.nb) to perform the analyses, run scenarios, and create the figures.
 
-The necessary files in [data]("data") directory are:
+The necessary files in [data](data) directory are:
 - Age stratified demography
 - Baseline (pre-pandemic) contact matrix
 - Contact matrix after the first lockdown
 - Age stratified hospitalization data
 - Age stratified seroprevalence 
 
-Run the [main notebook]("notebooks/main.nb") to solve the model for the baseline case, and generate the two scenarios.
-To speed up the process, the solution and analysis files are already in the [results]("results") directory but the code should run without them.
+Run the [main notebook](notebooks/main.nb) to solve the model for the baseline case, and generate the two scenarios.
+To speed up the process, the solution and analysis files are already in the [results](results) directory but the code should run without them.
 However, the codes to generate the results of sensitivity analyses from scratch are not included but follow the same format as that of the three main scenarios.
 Their results and figures, alongside all the main text and supplementary plots, are also run in the main notebook.
 
