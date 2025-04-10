@@ -1,3 +1,19 @@
+
+(* RETROSPECTIVE EVALUATION OF SCHOOL-RELATED MEASURES ON *)
+(* PRE-VACCINATION TRANSMISSION DYNAMICS OF SARS-COV-2 *)
+(* Benedetta Canfora, Rey Audie Escosio, Christiaan H. van Dorp, *)
+(* Otilia Boldea, Marc Bonten, Ana Nunes, and Ganna Rozhnova* *)
+(* g.rozhnova@umcutrecht.nl *)
+
+(* :Summary: *)
+(* This "plotting" package contains variables on colors and strings used for labeling and functions on plotting. *)
+
+(* :Package Version: 1.0 *)
+(* :Mathematica Version: 12.0 or later (adjust as needed) *)
+(* :Copyright: (c) 2025 Rey Audie Escosio. All rights reserved. *)
+
+
+
 BeginPackage["plotting`"]
 
 (* *************************************************************** *)
