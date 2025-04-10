@@ -1,12 +1,12 @@
 # COVID19-PT-Retrospective
 
 ## Overview 
-This is a GitHub repository for the paper "Retrospective evaluation of school-related measures on pre-vaccination dynamics of SARS-CoV-2".
+This is a GitHub repository for the paper "Retrospective evaluation of school-related measures on pre-vaccination transmission dynamics of SARS-CoV-2".
 In this project, we retrospectively assessed the role of school-related interventions in SARS-CoV-2 transmission in Portugal during the pre-vaccination period, providing quantitative evidence on their impact on hospital admissions and time-varying reproduction number.
 We compared the real-world baseline case to two simulated scenarios: letting the schools open throughout the first lockdown of 2020 (Scenario 1), and forcing school closures right after the summer holidays of 2020 (Scenario 2).
 
 All details are described in the manuscript:
-> Canfora, B., Escosio, R. A., Boldea, O., van Dorp, C. H., Nunes, A., and Rozhnova, G.. (2025). Retrospective evaluation of school-related measures on pre-vaccination dynamics of SARS-CoV-2. 
+> Canfora, B., Escosio, R. A., Boldea, O., van Dorp, C. H., Nunes, A., and Rozhnova, G.. (2025). Retrospective evaluation of school-related measures on pre-vaccination transmission dynamics of SARS-CoV-2. 
 
 
 ## Data
@@ -32,6 +32,27 @@ The scripts can be found in the [script]("scripts") directory. The R and Stan sc
 
 > Viana J, van Dorp CH, Nunes A, Gomes MC, van Boven M, Kretzschmar ME, Veldhoen M, Rozhnova G. Controlling the pandemic during the SARS-CoV-2 vaccination rollout. Nature communications. 2021 Jun 16;12(1):3674. doi: https://doi.org/10.1038/s41467-021-23938-8.
 
+### Model solutions and analysis
+The model solutions and analysis were done with Wolfram Mathematica 14.2.0.0 on Mac OS Sequioa 15.3.2.
+The [main notebook]("notebooks/main.nb") contains all the codes besides preliminary and plotting functions in the [packages]("packages") directory.
+It also contains the generated figures in the [figures]("figures") directory.
+For the local dependencies, the [preliminaries]("packages/preliminaries.m") file contain functions on file import and export, and statistical measures.
+The [plotting]("packages/plotting.m") file contain variables on colors and strings used for labeling and functions on plotting.
+
+## Using the notebook
+You should proceed as follows: 1) use the *R* and its packages to fit the model to the data; 2) export the parameter estimates to the [data]("data") directory and use the [main notebook]("notebooks/main.nb") to perform the analyses, run scenarios, and create the figures.
+
+The necessary files in [data]("data") directory are:
+- Age stratified demography
+- Baseline (pre-pandemic) contact matrix
+- Contact matrix after the first lockdown
+- Age stratified hospitalization data
+- Age stratified seroprevalence 
+
+Run the [main notebook]("notebooks/main.nb") to solve the model for the baseline case, and generate the two scenarios.
+To speed up the process, the solution and analysis files are already in the [results]("results") directory but the code should run without them.
+However, the codes to generate the results of sensitivity analyses from scratch are not included but follow the same format as that of the three main scenarios.
+Their results and figures, alongside all the main text and supplementary plots, are also run in the main notebook.
 
 ## Dependencies and hardware requirements 
 This code was developed on a MacBook Pro (13-inch, 2020), macOS: Sequoia 15.3.1, chip: Apple M1 Pro, memory: 8GB. 
@@ -45,6 +66,11 @@ Our study requires only a standard computer with enough RAM to support the in-me
 No non-standard hardware is required.
 Other than installation of these required software and packages, no installation is needed.
 
+## Acknowledgments
+We appreciate the valuable discussions with members of the Infectious Disease Modeling Group at the University Medical Center Utrecht in the Netherlands.
 
 ## Funding  
-The authors gratefully acknowledge funding from the Fundação para a Ciência e a Tecnologia, I.P., through national funds, under the project 2022.01448.PTDC “Controlo dirigido da COVID-19 após a vacinação em massa”, DOI 10.54499/ 2022.01448.PTDC. This work was also supported by UID/04046/2025 Centre grant from the Fundação para a Ciência e a Tecnologia, Portugal (to BioISI). Benedetta Canfora was supported by the Swaantje Mondt travel fund from the Center for Complex Systems Studies at Utrecht University. Ganna Rozhnova was supported by the VERDI project (101045989), funded by the European Union. Views and opinions expressed in this article are however those of the author(s) only and do not necessarily reflect those of the European Union or the Health and Digital Executive Agency. Neither the European Union nor the granting authority can be held responsible for them. We also appreciate the valuable discussions with Infectious Disease Modeling Group members at the University Medical Center Utrecht.
+The authors gratefully acknowledge funding from the Fundação para a Ciência e a Tecnologia, I.P., through national funds, under the project 2022.01448.PTDC, DOI 10.54499/ 2022.01448.PTDC. This work was also supported by UID/00100, BioISI (DOI: 10.54499/UIDB/04046/2020) Centre grant from FCT, Portugal (to BioISI). Benedetta Canfora was supported by the Swaantje Mondt travel fund from the Center for Complex Systems Studies at Utrecht University. Ganna Rozhnova was supported by the VERDI project (101045989), funded by the European Union. Views and opinions expressed in this article are however those of the author(s) only and do not necessarily reflect those of the European Union or the Health and Digital Executive Agency. Neither the European Union nor the granting authority can be held responsible for them.
+
+## Correspondence
+Correspondence and material requests should be addressed to Dr. Ganna Rozhnova, Julius Center for Health Sciences and Primary Care, University Medical Center Utrecht, P.O. Box 85500 Utrecht, The Netherlands; email: [g.rozhnova@umcutrecht.nl](mailto:g.rozhnova@umcutrecht.nl).
