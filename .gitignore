@@ -16,3 +16,5 @@ notebooks/main20250407.nb
 notebooks/main20250409.nb
 notebooks/mainWithParamElas.nb
 notebooks/mainCheckpoint.nb
+.DS_Store
+**/.DS_Store
