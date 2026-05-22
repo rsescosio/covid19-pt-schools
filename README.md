@@ -34,13 +34,13 @@ The scripts can be found in the [script](scripts) directory. The R and Stan scri
 
 ### Model solutions and analysis
 The model solutions and analysis were done with Wolfram Mathematica 14.2.0.0 on Mac OS Sequioa 15.3.2.
-The [main notebook](notebooks/main.nb) contains all the codes besides preliminary and plotting functions in the [packages](packages) directory.
+The [main notebook](notebooks/mainTwoScenarios.nb) contains all the codes besides preliminary and plotting functions in the [packages](packages) directory.
 It also contains the generated figures in the [figures](figures) directory.
 For the local dependencies, the [preliminaries](packages/preliminaries.m) file contain functions on file import and export, and statistical measures.
 The [plotting](packages/plotting.m) file contain variables on colors and strings used for labeling and functions on plotting.
 
 ## Using the notebook
-You should proceed as follows: 1) use the *R* and its packages to fit the model to the data; 2) export the parameter estimates to the [data](data) directory and use the [main notebook](notebooks/main.nb) to perform the analyses, run scenarios, and create the figures.
+You should proceed as follows: 1) use the *R* and its packages to fit the model to the data; 2) export the parameter estimates to the [data](data) directory and use the [main notebook](notebooks/mainTwoScenarios.nb) to perform the analyses, run scenarios, and create the figures.
 
 The necessary files in [data](data) directory are:
 - Age stratified demography
@@ -49,10 +49,11 @@ The necessary files in [data](data) directory are:
 - Age stratified hospitalization data
 - Age stratified seroprevalence 
 
-Run the [main notebook](notebooks/main.nb) to solve the model for the baseline case, and generate the two scenarios.
+Run the [main notebook](notebooks/mainTwoScenarios.nb) to solve the model for the baseline case, and generate the two scenarios.
 To speed up the process, the solution and analysis files are already in the [results](results) directory but the code should run without them.
-However, the codes to generate the results of sensitivity analyses from scratch are not included but follow the same format as that of the three main scenarios.
+The codes to generate the results of sensitivity analyses from scratch are not included but follow the same format as that of the three main scenarios.
 Their results and figures, alongside all the main text and supplementary plots, are also run in the main notebook.
+Other sensitivity analyses such as for fitting seroprevalence to different dates (time indices [117](notebooks/supplementarySeroprevalence117.nb) and [157](notebooks/supplementarySeroprevalence157.nb)) and for varying [partial school mitigation levels](notebooks/supplementaryVaryMultiplier.nb).
 
 ## Dependencies and hardware requirements 
 This code was developed on a MacBook Pro (13-inch, 2020), macOS: Sequoia 15.3.1, chip: Apple M1 Pro, memory: 8GB. 
