@@ -93,4 +93,22 @@ relativeChangeAround[DATAMAT_] :=
     100 (DATAMAT[[iDim, 2]] - DATAMAT[[iDim, 1]])/Max[DATAMAT[[iDim, 1]], 0.0001]],
    {iDim, 1, Dimensions[DATAMAT][[1]]}];
 
+
+
+importExportScenarioResultsVaryMultiplier[labelPrefix_, dataFunction_, subFolder_] :=
+  Table[Module[{filePath, state},
+    filePath = 
+     FileNameJoin[{"../results"}, 
+      StringJoin["/", subFolder, "/", labelPrefix, "_", scenarios[[iScen]], "_", 
+         ToString[PaddedForm[N[100 * multipliers[[iNumMult]]], {3, 0}, NumberPadding -> "0"]],
+        ".wxf"]];
+    If[FileExistsQ[filePath],
+     state = Import[filePath, "WXF"];
+     state,
+     state = dataFunction[iScen, iNumMult];
+     Export[filePath, state, "WXF", "CompressionLevel" -> 5];
+     state]],
+   {iScen, 1, Length[scenarios]}, {iNumMult, 1, numMultipliers}];
+
+
 EndPackage[]

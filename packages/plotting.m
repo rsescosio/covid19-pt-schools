@@ -100,14 +100,14 @@ ageLabelShort =
 
 (* Parameter histogram labels *)
 parameterConstXLabelShort =
-   {"\[Epsilon]", "1-\[Zeta]",
+   {"\[Epsilon]","\[Zeta]",
    "\[Theta] \!\(\*SubsuperscriptBox[\(\[Sum]\), \(k = 1\), \ \(n\)]\)\!\(\*SubscriptBox[\(N\), \(k\)]\)",
    "\!\(\*SubscriptBox[\(\[Beta]\), \(\([0, 20\)\()\)\)]\)",
    "\!\(\*SubscriptBox[\(\[Beta]\), \(\([20, 60\)\()\)\)]\)", 
    "\[Phi]", "1/\[Alpha]", "1/\[Gamma]"};
 parameterConstXLabel =
    {"Probability of transmission\nper contact (%)",
-   "Reduction in probability of\ntransmission per contact", "Initial number\nof infected persons", 
+   "Mitigation factor for\nfirst lockdown contacts", "Initial number\nof infected persons", 
    "Susceptibility of [0,20) y.o.\nrelative to 60+ y.o.",
    "Susceptibility of [20,60) y.o.\nrelative to 60+ y.o.", 
    "\nOverdispersion parameter", "\nLatent period (days)", 
@@ -160,26 +160,29 @@ alphabetLetters = CharacterRange["a", "z"];
 plotWithLetter[
    PLOT_,
    LABEL_String:"", SIDE_:"left", FONTSIZE_:sizeFontBigger,
-   TEXTCOLOR_:Black, MANUALLEGEND_:{}] :=
-   Show[
-      PLOT,
-      Epilog ->
-         {Join[
-            {Inset[
-               Graphics[Text[StyleForm[LABEL,
-                                       FontSize -> FONTSIZE,
-                                       FontColor-> TEXTCOLOR]]],
-               Which[SIDE === "right", Scaled[{0.9, 0.9}],
-                  SIDE === "left", Scaled[{0.1, 0.9}],
-                  SIDE === "lefter", Scaled[{0.05, 0.9}],
-                  SIDE === "righter", Scaled[{0.95, 0.9}],
-                  True, SIDE]
-               ]},
-            If[Length[Cases[PLOT, OptionsPattern[Epilog]]] > 0,
-               Epilog /. Options[PLOT, Epilog],
-               {}]]
-         }
-      ];
+   TEXTCOLOR_:Black, LEGENDTOSHOW_:None] :=
+   Legended[
+      Show[
+         PLOT,
+         Epilog ->
+            {Join[
+               {Inset[
+                  Graphics[Text[StyleForm[LABEL,
+                                          FontSize -> FONTSIZE,
+                                          FontColor-> TEXTCOLOR]]],
+                  Which[SIDE === "right", Scaled[{0.9, 0.9}],
+                     SIDE === "left", Scaled[{0.1, 0.9}],
+                     SIDE === "lefter", Scaled[{0.05, 0.9}],
+                     SIDE === "righter", Scaled[{0.95, 0.9}],
+                     True, SIDE]
+                  ]},
+               If[Length[Cases[PLOT, OptionsPattern[Epilog]]] > 0,
+                  Epilog /. Options[PLOT, Epilog],
+                  {}]]
+            }
+         ],
+      LEGENDTOSHOW
+   ];
 
 
 plotScenarioTrajectories[
@@ -193,21 +196,40 @@ plotScenarioTrajectories[
    LETTERLOC_:"lefter",
    PLOTADDEND_:Graphics[],
    MEDIANTRAJ_:{{},{},{}},
-   INDIVTRAJ_:False] :=
-   Module[{FIG1, FIG2, XLABEL},
+   INDIVTRAJ_:False,
+   LEGENDTOSHOW_:True,
+   ASPECTRATIO_:0.5,
+   IMAGESIZE_:500] :=
+   Module[{FIG1, FIG2, XLABEL, LEG1TOSHOW, LEG2TOSHOW},
       XLABEL = "";
+
+      LEG1TOSHOW = Which[
+         LEGENDTOSHOW === "hosp", legendScen1Hosp,
+         LEGENDTOSHOW === "elas", legendScen1Elas,
+         LEGENDTOSHOW === "indiv", legendScen1Indiv,
+         LEGENDTOSHOW === True, None
+      ];
+
+      LEG2TOSHOW = Which[
+         LEGENDTOSHOW === "hosp", legendScen2Hosp,
+         LEGENDTOSHOW === "elas", legendScen2Elas,
+         LEGENDTOSHOW === "indiv", legendScen2Indiv,
+         LEGENDTOSHOW === True, None
+      ];
+
       FIG1 =
          plotWithLetter[
             {plotLineWithCrI[
                TRAJECTORIES[[1]],
                colorBlue, TITLE[[1]], XLABEL, YLABEL, 1,
-               XTICKS[[1]], XYLIMITS[[1]], 0.5, 500, Solid,
+               XTICKS[[1]], XYLIMITS[[1]], ASPECTRATIO, IMAGESIZE, Solid,
                MEDIANTRAJ[[1]], INDIVTRAJ],
             plotLineWithCrI[
                TRAJECTORIES[[2]], 
                colorOrange, "", "", "", 1,
-               XTICKS[[1]], XYLIMITS[[1]], 0.5, 500, Solid,
-               MEDIANTRAJ[[2]], INDIVTRAJ],
+               XTICKS[[1]], XYLIMITS[[1]], ASPECTRATIO, IMAGESIZE, Solid,
+               MEDIANTRAJ[[2]], INDIVTRAJ, 
+               LEG1TOSHOW],
             PLOTADDEND},
             LETTERLABELS[[1]],
             LETTERLOC];
@@ -216,13 +238,14 @@ plotScenarioTrajectories[
             plotLineWithCrI[
                TRAJECTORIES[[1]], 
                colorBlue, TITLE[[2]], XLABEL, "", 2, 
-               XTICKS[[2]], XYLIMITS[[2]], 0.5, 500, Solid,
+               XTICKS[[2]], XYLIMITS[[2]], ASPECTRATIO, IMAGESIZE, Solid,
                MEDIANTRAJ[[1]], INDIVTRAJ],
             plotLineWithCrI[
                TRAJECTORIES[[3]], 
                colorOrange, "", "", "", 2,
-               XTICKS[[1]], XYLIMITS[[1]], 0.5, 500, Solid,
-               MEDIANTRAJ[[3]], INDIVTRAJ],
+               XTICKS[[1]], XYLIMITS[[1]], ASPECTRATIO, IMAGESIZE, Solid,
+               MEDIANTRAJ[[3]], INDIVTRAJ, 
+               LEG2TOSHOW],
             PLOTADDEND},
             LETTERLABELS[[2]],
             LETTERLOC];
@@ -232,10 +255,10 @@ plotScenarioTrajectories[
 
 plotLineWithCrI[
    TRAJECTORIES_, 
-   COLOR_:colorBlue, TITLE_:"", XLABEL_:"", YLABEL_:"", SCENARIOPERIOD_:1,
+   COLOR_, TITLE_:"", XLABEL_:"", YLABEL_:"", SCENARIOPERIOD_:1,
    XTICKS_:ticksVisible, XYLIMITS_:{0, 1000}, ASPECTRATIO_:0.5,
    IMAGESIZE_:500, LINESTYLE_:Solid, MEDIANTRAJ_:{}, 
-   INDIVTRAJ_:False, SCENTOSHOW_:"default"] := 
+   INDIVTRAJ_:False, LEGENDTOSHOW_:None, SCENTOSHOW_:"default"] := 
    Module[{MEDIAN2PLOT, TRAJ2PLOT, MAINPLOT, INDIVTRAJPLOT},
       MEDIAN2PLOT = 
          If[Length[MEDIANTRAJ] == 0,
@@ -296,7 +319,9 @@ plotLineWithCrI[
             {If[XTICKS === ticksVisible, 70, 10],
             If[TITLE === "", 1, Automatic]}}, 
          Prolog ->
-            yellowLinesAndRegion[XYLIMITS, SCENTOSHOW]
+            yellowLinesAndRegion[XYLIMITS, SCENTOSHOW],
+         PlotLegends ->
+            LEGENDTOSHOW
          ];
 
       INDIVTRAJPLOT = 
@@ -312,7 +337,7 @@ plotLineWithCrI[
                      {Global`tStart2, Global`tEnd2}],
                   XYLIMITS}],
             Graphics[]];
-      
+
       If[INDIVTRAJ,
          Show[MAINPLOT, INDIVTRAJPLOT],
          MAINPLOT]
@@ -368,13 +393,13 @@ plotDiagram[
                Line[{{Global`transitionDatesQuantiles975[[tIdx]], 0},
                {Global`transitionDatesQuantiles975[[tIdx]], 480}}], 
                {tIdx, 1, Length[Global`transitionDatesQuantiles975]}]},
-         {Dotted, colorYellowBright,
+         (*{Dotted, colorYellowBright,
             Line[{{"June 10, 2020", 0},
-            {"June 10, 2020", 550}}]},
+            {"June 10, 2020", 550}}]},*)
          {Directive[colorYellowBright, Opacity[0.075]],
             Rectangle[
                {AbsoluteTime["March 24, 2020"], 0},
-               {AbsoluteTime["June 10, 2020"], 550}]},
+               {AbsoluteTime["April 28, 2020"], 550}]},
          {Directive[colorYellowBright, Opacity[0.075]],
             Rectangle[
                {AbsoluteTime["August 22, 2020"], 0},
@@ -387,14 +412,14 @@ plotDiagram[
                   TextStyle ->
                      {FontSize -> sizeFontSmallest,
                      colorYellowBright}],
-            {tIdx, 1, Length[Global`transitionDates]}]},
+            {tIdx, 1, Length[Global`transitionDates]}]}(*,
          {Text["School\nholidays",
             {AbsoluteTime["June 10, 2020"], 450},
             {-1.075, 1},
                TextAlignment-> Left,
                TextStyle ->
                   {FontSize -> sizeFontSmallest,
-                  colorYellowBright}]}
+                  colorYellowBright}]}*)
          },
       Epilog ->
          {
@@ -581,7 +606,7 @@ plotHistogram[
 
 plotBoxWhisker[
    TRAJECTORIES_,
-   COLORS_, LABELS_:"", XLABEL_:"", YLABEL_:"", TITLE_:"", BARSPACING_:2] :=
+   COLORS_, LABELS_:"", XLABEL_:"", YLABEL_:"", TITLE_:"", BARSPACING_:2, ASPECTRATIO_:0.5, IMAGESIZE_:500] :=
    BoxWhiskerChart[
       TRAJECTORIES,
       {{"Whiskers", Thick}, {"Fences", Thick}},
@@ -589,8 +614,8 @@ plotBoxWhisker[
       ChartLabels -> LABELS,
       BarSpacing -> BARSPACING,
       ChartStyle -> COLORS, 
-      AspectRatio -> 0.5,
-      ImageSize -> 500,
+      AspectRatio -> ASPECTRATIO,
+      ImageSize -> IMAGESIZE,
       PlotLabel -> Style[TITLE,
             FontSize -> sizeFontBig,
             FontColor -> Black,
@@ -639,12 +664,348 @@ plotBarWithError[
          {Style[XLABEL, FontSize -> sizeFontBig], 
             Style[YLABEL, FontSize -> sizeFontBig]}]];
 
+legendRawScen1Hosp = 
+   Row[{
+         Column[{
+            PointLegend[{None},
+                        {Style["    Data", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {{Graphics[{Black, Style[Circle[], Thickness[0.25]]}], 5}},
+                        LegendMarkerSize -> 6],
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 1, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools open", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorBlue, Opacity[0.075], EdgeForm[colorBlue]]},
+                        {Style["Baseline, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorOrange, Opacity[0.075], EdgeForm[colorOrange]]},
+                        {Style["Scenario 1, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}]
+         }]
+      }];
+
+legendRawScen1HospFlat = 
+   Row[{
+         Column[{
+            PointLegend[{None},
+                        {Style["    Data", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {{Graphics[{Black, Style[Circle[], Thickness[0.25]]}], 5}},
+                        LegendMarkerSize -> 6],
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools open", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}]
+         }],
+         Column[{
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 1, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorBlue, Opacity[0.075], EdgeForm[colorBlue]]},
+                        {Style["Baseline, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorOrange, Opacity[0.075], EdgeForm[colorOrange]]},
+                        {Style["Scenario 1, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}]
+         }]
+      }];
+
+legendScen1Hosp = 
+   Placed[
+      legendRawScen1Hosp,
+      {Left, Below}
+   ]; 
+
+legendRawScen2Hosp = 
+   Row[{
+         Column[{
+            PointLegend[{None},
+                        {Style["    Data", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {{Graphics[{Black, Style[Circle[], Thickness[0.25]]}], 5}},
+                        LegendMarkerSize -> 6],
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 2, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools closed", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorBlue, Opacity[0.075], EdgeForm[colorBlue]]},
+                        {Style["Baseline, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorOrange, Opacity[0.075], EdgeForm[colorOrange]]},
+                        {Style["Scenario 2, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}]
+         }]
+      }];
+
+legendRawScen2HospFlat = 
+   Row[{
+         Column[{
+            PointLegend[{None},
+                        {Style["    Data", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {{Graphics[{Black, Style[Circle[], Thickness[0.25]]}], 5}},
+                        LegendMarkerSize -> 6],
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools closed", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}]
+         }],
+         Column[{
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 2, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorBlue, Opacity[0.075], EdgeForm[colorBlue]]},
+                        {Style["Baseline, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorOrange, Opacity[0.075], EdgeForm[colorOrange]]},
+                        {Style["Scenario 2, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}]
+         }]
+      }];
+
+legendScen2Hosp = 
+   Placed[
+      legendRawScen2Hosp,
+      {Right, Below}
+   ];         
+
+legendRawScen1Elas = 
+   Row[{
+         Column[{
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools open", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 1, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorBlue, Opacity[0.075], EdgeForm[colorBlue]]},
+                        {Style["Baseline, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorOrange, Opacity[0.075], EdgeForm[colorOrange]]},
+                        {Style["Scenario 1, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{White}, {Style[" ", FontColor -> White]}]
+         }]
+      }];
+
+legendRawScen1ElasFlat = 
+   Row[{
+         Column[{
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools open", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{White}, {Style[" ", FontColor -> White]}]
+         }],
+         Column[{
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 1, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorBlue, Opacity[0.075], EdgeForm[colorBlue]]},
+                        {Style["Baseline, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorOrange, Opacity[0.075], EdgeForm[colorOrange]]},
+                        {Style["Scenario 1, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}]
+         }]
+      }];
+
+legendScen1Elas = 
+   Placed[
+      legendRawScen1Elas,
+      {Left, Below}
+   ]; 
+
+legendRawScen2Elas = 
+   Row[{
+         Column[{
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools closed", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 2, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorBlue, Opacity[0.075], EdgeForm[colorBlue]]},
+                        {Style["Baseline, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorOrange, Opacity[0.075], EdgeForm[colorOrange]]},
+                        {Style["Scenario 2, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{White}, {Style[" ", FontColor -> White]}]
+         }]
+      }];
+
+legendRawScen2ElasFlat = 
+   Row[{
+         Column[{
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools closed", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{White}, {Style[" ", FontColor -> White]}]
+         }],
+         Column[{
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 2, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorBlue, Opacity[0.075], EdgeForm[colorBlue]]},
+                        {Style["Baseline, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            PointLegend[{Directive[colorOrange, Opacity[0.075], EdgeForm[colorOrange]]},
+                        {Style["Scenario 2, 95% CrI", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}]
+         }]
+      }];
+
+legendScen2Elas = 
+   Placed[
+      legendRawScen2Elas,
+      {Right, Below}
+   ];               
+
+
+legendRawScen1Indiv = 
+   Row[{
+         Column[{
+            PointLegend[{None},
+                        {Style["    Data", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {{Graphics[{Black, Style[Circle[], Thickness[0.25]]}], 5}},
+                        LegendMarkerSize -> 6],
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 1, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools open", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            LineLegend[{Directive[colorBlue, Thickness[0.0009]]},
+                        {Style["Baseline, trajectories", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{Directive[colorOrange, Thickness[0.0009]]},
+                        {Style["Scenario 1, trajectories", 
+                           FontSize -> sizeFontSmall]}]
+         }]
+      }];
+
+legendScen1Indiv = 
+   Placed[
+      legendRawScen1Indiv,
+      {Left, Below}
+   ]; 
+
+legendRawScen2Indiv = 
+   Row[{
+         Column[{
+            PointLegend[{None},
+                        {Style["    Data", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {{Graphics[{Black, Style[Circle[], Thickness[0.25]]}], 5}},
+                        LegendMarkerSize -> 6],
+            LineLegend[{colorBlue},
+                        {Style["Baseline, median", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{colorOrange},
+                        {Style["Scenario 2, median", 
+                           FontSize -> sizeFontSmall]}]
+         }],
+         Column[{
+            PointLegend[{Directive[colorYellowBright, Opacity[0.075], EdgeForm[colorYellowBright]]}, 
+                        {Style["Schools closed", 
+                           FontSize -> sizeFontSmall]},
+                        LegendMarkers -> {Graphics[Rectangle[]]}],
+            LineLegend[{Directive[colorBlue, Thickness[0.0009]]},
+                        {Style["Baseline, trajectories", 
+                           FontSize -> sizeFontSmall]}],
+            LineLegend[{Directive[colorOrange, Thickness[0.0009]]},
+                        {Style["Scenario 2, trajectories", 
+                           FontSize -> sizeFontSmall]}]
+         }]
+      }];
+
+legendScen2Indiv = 
+   Placed[
+      legendRawScen2Indiv,
+      {Right, Below}
+   ];         
+
+
 (* *************************************************************** *)
 (* PRIVATE FUNCTIONS *)
 Begin["`Private`"]
 
 annotatedArrow[p_, q_, label_] :=
-   {colorOrange,
+   {White,
       Arrowheads[
          {{-.015, 0},
          {0, 0.5, Graphics[Text[label,
@@ -663,14 +1024,11 @@ yellowLinesAndRegion[XYLIMITS_, SCENTOSHOW_:"default"] :=
             {Global`transitionDates[[tIdx]],
                XYLIMITS[[2]]}}],
       {tIdx, 1, Length[Global`transitionDates]}]},
-   {Dotted, colorYellowBright,
-      Line[{{"June 10, 2020", XYLIMITS[[1]]},
-            {"June 10, 2020", XYLIMITS[[2]]}}]},
    {Directive[colorYellowBright, 
                Opacity[0.075]],
       Rectangle[
          {AbsoluteTime["March 24, 2020"], XYLIMITS[[1]]},
-         {AbsoluteTime["June 10, 2020"], XYLIMITS[[2]]}]},
+         {AbsoluteTime["April 28, 2020"], XYLIMITS[[2]]}]},
    Which[SCENTOSHOW == "1to2",
          {},
          True,
@@ -689,12 +1047,20 @@ yellowLinesAndRegion[XYLIMITS_, SCENTOSHOW_:"default"] :=
             TextStyle ->
                {FontSize -> sizeFontSmaller, colorYellowBright}],
       {tIdx, 1, Length[Global`transitionDates]}]},
-   {Text[Rotate["School holiday", Pi/2],
+   Which[SCENTOSHOW == "1relax", {Dotted, colorYellowBright,
+      Line[{{"June 10, 2020", XYLIMITS[[1]]},
+            {"June 10, 2020", XYLIMITS[[2]]}}]}, True, {}],
+   Which[SCENTOSHOW == "1relax", {Text[Rotate["School holiday", Pi/2],
       {AbsoluteTime["June 10, 2020"], XYLIMITS[[2]]},
       {-1.75, 1},
          TextStyle ->
             {FontSize -> sizeFontSmaller,
-            colorYellowBright}]}};
+            colorYellowBright}]}, True, {}],
+   Which[SCENTOSHOW == "1relax", {Directive[colorYellowBright, 
+               Opacity[0.075]],
+      Rectangle[
+         {AbsoluteTime["April 28, 2020"], XYLIMITS[[1]]},
+         {AbsoluteTime["June 10, 2020"], XYLIMITS[[2]]}]}, True, {}]};
 
 End[]
 
