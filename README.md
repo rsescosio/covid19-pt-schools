@@ -1,5 +1,7 @@
 # covid19-pt-schools
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20346558.svg)](https://doi.org/10.5281/zenodo.20346558)
+
 ## Overview 
 This is a GitHub repository for the paper "Retrospective evaluation of school-related measures on pre-vaccination transmission dynamics of SARS-CoV-2".
 In this project, we retrospectively assessed the role of school-related interventions in SARS-CoV-2 transmission in Portugal during the pre-vaccination period, providing quantitative evidence on their impact on hospital admissions and time-varying reproduction number.
