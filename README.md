@@ -1,4 +1,4 @@
-# COVID19-PT-Retrospective
+# covid19-pt-schools
 
 ## Overview 
 This is a GitHub repository for the paper "Retrospective evaluation of school-related measures on pre-vaccination transmission dynamics of SARS-CoV-2".
